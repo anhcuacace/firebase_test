@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner=this
         binding.btnUp.setOnClickListener{
@@ -51,21 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun isAndroidQ(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-    }
 
-    fun isAndroidP(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-    }
-
-    fun isAndroidO(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-    }
-
-    private fun isAndroidR(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-    }
 
 
 
@@ -88,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         return isGranted
     }
     private fun getStoragePermissions(): Array<String> {
-        return if (isAndroidR()) {
+        return if (Utils.isAndroidR()) {
             STORAGE_PERMISSION_STORAGE_SCOPE
         } else {
             STORAGE_PERMISSION_UNDER_STORAGE_SCOPE
