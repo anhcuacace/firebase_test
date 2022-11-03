@@ -8,20 +8,27 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.firebase_test.databinding.ActivityUpBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.*
 
 class UpActivity : AppCompatActivity() {
     var isEmpty = MutableLiveData(false)
     var isLoading = MutableLiveData(false)
+    private val adapter=ImageAdapter()
     private var listImage =MutableLiveData<MutableList<Uri>>()
     private lateinit var binding: ActivityUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +40,80 @@ class UpActivity : AppCompatActivity() {
         setContentView(binding.root)
         initRecyclerView()
         loadImage()
+        binding.btnUp.setOnClickListener {
+            initFireBase()
+        }
+    }
+
+    private fun initFireBase() {
+        updateImage(adapter.listItemChoices)
+    }
+
+    private fun updateImage(listItemChoices: MutableList<Uri>) {
+
+
+        val listUrl= arrayListOf<String>()
+
+
+        listItemChoices.forEachIndexed { index, uri ->
+            val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+            val storageReference: StorageReference = firebaseStorage.reference
+            val imageName = UUID.randomUUID().toString()
+            val imageReference = storageReference.child("images").child(imageName)
+            imageReference.putFile(uri).addOnSuccessListener {
+
+            // Toast.makeText(this, "Image uploaded", Toast.LENGTH_LONG).show()
+
+            //download url
+            val myUploadedImageReference = storageReference.child("images").child(imageName)
+
+            myUploadedImageReference.downloadUrl.addOnSuccessListener { url ->
+
+                val imageURL = url.toString()
+
+                listUrl.add(imageURL)
+                if (index == listItemChoices.size-1){
+                    addRoomToDatabase(listUrl)
+                }
+            }
+
+        }.addOnFailureListener {
+                Log.d("ádsads",it.message.toString())
+            if (index == listItemChoices.size-1){
+                addRoomToDatabase(listUrl)
+            }
+            // Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+        }
+        }
+
+
+
+    }
+    private fun addRoomToDatabase(url: ArrayList<String>) {
+        val database=FirebaseDatabase.getInstance()
+         val myReference: DatabaseReference = database.reference.child("Rooms")
+
+
+        val id: String = myReference.push().key.toString()
+
+        val room = Room(
+            id,
+            url,
+            binding.editText.text.toString()
+        )
+
+        myReference.child(id).setValue(room).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                finish()
+            } else {
+                Toast.makeText(
+                    this,
+                    task.exception.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -41,8 +122,9 @@ class UpActivity : AppCompatActivity() {
             if (it.isEmpty()){
                 isEmpty.value=true
             }else{
-                val adapter=ImageAdapter()
+
                 adapter.list=it
+                binding.recycleView.layoutManager=GridLayoutManager(this,3)
                 binding.recycleView.adapter=adapter
             }
 
@@ -50,7 +132,7 @@ class UpActivity : AppCompatActivity() {
     }
 
     private fun loadImage(){
-        runBlocking (Dispatchers.Default) {
+        CoroutineScope (Dispatchers.Default).launch {
             listImage.postValue(loadAllImages())
         }
     }
