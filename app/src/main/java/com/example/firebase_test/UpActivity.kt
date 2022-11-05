@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -78,7 +77,6 @@ class UpActivity : AppCompatActivity() {
             }
 
         }.addOnFailureListener {
-                Log.d("ádsads",it.message.toString())
             if (index == listItemChoices.size-1){
                 addRoomToDatabase(listUrl)
             }

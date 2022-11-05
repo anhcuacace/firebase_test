@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.firebase_test.databinding.LayoutImageBinding
+import com.example.firebase_test.databinding.ItemImageBinding
 
 class ImageAdapter : RecyclerView.Adapter<ImageAdapter.MyViewHotel>() {
-    inner class MyViewHotel(private val item: LayoutImageBinding) :
+    inner class MyViewHotel(private val item: ItemImageBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun bind(position: Int) {
             Glide.with(itemView.context).load(list!![position])
@@ -17,9 +17,9 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.MyViewHotel>() {
                 .error(R.drawable.ic_baseline_image_32)
                 .into(item.appCompatImageView)
 
-            if (listItemChoices.any { it==list!![position] }){
+            if (listItemChoices.any { it == list!![position] }) {
                 item.choice.setImageResource(R.drawable.ic_checked)
-            }else{
+            } else {
                 item.choice.setImageResource(R.drawable.ic_check)
             }
             item.choice.setOnClickListener{
@@ -46,7 +46,7 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.MyViewHotel>() {
     var listItemChoices= mutableListOf<Uri>()
     var list: List<Uri>? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHotel {
-        val binding = LayoutImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHotel(binding)
     }
 
