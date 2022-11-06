@@ -27,8 +27,8 @@ class LoadActivity : AppCompatActivity() {
         myReference.get().addOnCompleteListener {
             if (it.isSuccessful) {
                 for (data in it.result.children) {
+                    val id = data.key.toString()
                     val name = data.child("roomName").value.toString()
-                    val id = data.child("id").value.toString()
                     val list = data.child("img").value as List<String>
                     roomList.add(Room(id, list, name))
                 }

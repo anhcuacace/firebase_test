@@ -11,7 +11,7 @@ class RoomAdapter : RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             runBlocking {
-                val adapter = SliderAdapter(roomList!![position].img)
+                val adapter = roomList!![position].img?.let { SliderAdapter(it) }
                 binding.viewPager.adapter = adapter
                 binding.room = roomList!![position]
             }

@@ -41,11 +41,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.lifecycleOwner=this
-        binding.btnUp.setOnClickListener{
+        binding.lifecycleOwner = this
+        binding.btnUp.setOnClickListener {
             resultLauncher.launch(getStoragePermissions())
+        }
+        binding.btnView.setOnClickListener {
+            val intent = Intent(this, LoadActivity::class.java)
+            startActivity(intent)
         }
     }
 

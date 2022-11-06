@@ -7,13 +7,6 @@ object Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
 
-    fun isAndroidP(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-    }
-
-    fun isAndroidO(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-    }
 
      fun isAndroidR(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
