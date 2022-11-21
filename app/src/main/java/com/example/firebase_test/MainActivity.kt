@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.lifecycleOwner = this
+
         binding.btnUp.setOnClickListener {
             resultLauncher.launch(getStoragePermissions())
         }
@@ -102,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
+    //Xin cấp quyền
     private fun showAlertPermissionNotGrant() {
         if (!hasShowRequestPermissionRationale(this, *getStoragePermissions())) {
             val snackBar = Snackbar.make(

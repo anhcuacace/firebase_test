@@ -17,14 +17,14 @@
             android:id="@+id/btn_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="upload image"
+            android:text="upload image(Up)"
             android:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="view Image"
+            android:text="view Image(Load)"
             android:textAllCaps="false" />
 
 

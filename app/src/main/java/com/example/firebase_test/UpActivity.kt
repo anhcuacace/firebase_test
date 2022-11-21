@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -25,22 +26,47 @@ import java.io.File
 import java.util.*
 
 class UpActivity : AppCompatActivity() {
+
     var isEmpty = MutableLiveData(false)
     var isLoading = MutableLiveData(false)
+
     private val adapter=ImageAdapter()
     private var listImage =MutableLiveData<MutableList<Uri>>()
+
     private lateinit var binding: ActivityUpBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         isEmpty.value=false
         isLoading.value=true
+
         binding = ActivityUpBinding.inflate(layoutInflater)
         binding.lifecycleOwner= this
         setContentView(binding.root)
+
+        //khở tạo rycycleview
         initRecyclerView()
+        // load anhr vao recycleview de chon anh
         loadImage()
+
         binding.btnUp.setOnClickListener {
             initFireBase()
+        }
+        binding.btnContinue.setOnClickListener {
+            binding.btnContinue.visibility = View.GONE
+            binding.btnUp.visibility = View.VISIBLE
+            binding.recycleView.visibility = View.VISIBLE
+            binding.btnQuaylai.visibility = View.VISIBLE
+            binding.editText.visibility = View.GONE
+
+        }
+        binding.btnQuaylai.setOnClickListener {
+            binding.btnContinue.visibility = View.VISIBLE
+            binding.btnUp.visibility = View.GONE
+            binding.recycleView.visibility = View.GONE
+            binding.btnQuaylai.visibility = View.GONE
+            binding.editText.visibility = View.VISIBLE
         }
     }
 
@@ -49,11 +75,7 @@ class UpActivity : AppCompatActivity() {
     }
 
     private fun updateImage(listItemChoices: MutableList<Uri>) {
-
-
         val listUrl= arrayListOf<String>()
-
-
         listItemChoices.forEachIndexed { index, uri ->
             val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
             val storageReference: StorageReference = firebaseStorage.reference
@@ -140,6 +162,7 @@ class UpActivity : AppCompatActivity() {
         val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         return false.getListFromUri(this, uri )
     }
+
     private fun Boolean.getListFromUri(
         context: Context,
         uri: Uri
@@ -152,8 +175,6 @@ class UpActivity : AppCompatActivity() {
                     MediaStore.Images.Media.DATA
 
                 )
-
-
 
         createCursor(
             context.contentResolver,

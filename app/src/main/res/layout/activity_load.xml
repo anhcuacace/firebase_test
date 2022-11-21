@@ -26,9 +26,6 @@
 
 
 
-
-
-
             <TextView
                 android:visibility="@{activity.isEmpty?View.VISIBLE:View.GONE}"
                 android:layout_width="match_parent"

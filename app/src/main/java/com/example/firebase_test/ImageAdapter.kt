@@ -45,6 +45,7 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.MyViewHotel>() {
     }
     var listItemChoices= mutableListOf<Uri>()
     var list: List<Uri>? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHotel {
         val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHotel(binding)

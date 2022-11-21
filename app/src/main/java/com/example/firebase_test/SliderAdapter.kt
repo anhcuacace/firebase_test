@@ -14,7 +14,8 @@ class SliderAdapter(private val list: List<String>) :
         fun bind(position: Int) {
             binding.choice.visibility = View.GONE
             Glide.with(itemView.context).load(list[position])
-                .placeholder(R.drawable.ic_baseline_image_32).error(R.drawable.ic_baseline_image_32)
+                .placeholder(R.drawable.ic_baseline_image_32)
+                .error(R.drawable.ic_baseline_image_32)
                 .into(binding.appCompatImageView)
         }
 

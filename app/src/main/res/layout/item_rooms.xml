@@ -38,24 +38,22 @@
             android:maxLines="1"
             android:text="@{room.id}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/string_id"
             tools:text="sdfjhhsak" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="176dp"
+            android:layout_marginTop="124dp"
             android:elevation="4dp"
             android:maxLength="30"
             android:maxLines="1"
             android:text="@{room.roomName}"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/view_pager"
-            app:layout_constraintEnd_toEndOf="@+id/view_pager"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.96"
+            app:layout_constraintTop_toBottomOf="@id/view_pager"
             tools:text="ádhjdsđ" />
 
 

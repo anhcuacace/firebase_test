@@ -11,10 +11,16 @@
         <import type="android.view.View" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_quaylai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="quay lai"
+            android:visibility="@{activity.isEmpty?View.VISIBLE:View.GONE}"
+          />
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editText"
             android:layout_width="wrap_content"
@@ -23,7 +29,9 @@
             android:maxLines="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_up"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_toRightOf="@+id/btn_quaylai"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_up"
             android:layout_width="wrap_content"
@@ -32,6 +40,15 @@
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_toRightOf="@+id/editText"
+            android:visibility="@{activity.isEmpty?View.VISIBLE:View.GONE}"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tiếp"
+            android:layout_toRightOf="@+id/editText"
             />
 
 
@@ -39,7 +56,10 @@
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/editText"/>
+            app:layout_constraintTop_toBottomOf="@+id/editText"
+            android:layout_below="@+id/editText"
+            android:visibility="@{activity.isEmpty?View.VISIBLE:View.GONE}"
+            />
 
 
         <TextView
@@ -63,10 +83,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_centerInParent="true"/>
 
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>
