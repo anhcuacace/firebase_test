@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.firebase_test.databinding.ActivityUpBinding
@@ -25,21 +24,21 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
-class UpActivity : AppCompatActivity() {
+class UpActivity : BaseActivity() {
 
     var isEmpty = MutableLiveData(false)
     var isLoading = MutableLiveData(false)
 
-    private val adapter=ImageAdapter()
-    private var listImage =MutableLiveData<MutableList<Uri>>()
+    private val adapter = ImageAdapter()
+    private var listImage = MutableLiveData<MutableList<Uri>>()
 
     private lateinit var binding: ActivityUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        isEmpty.value=false
-        isLoading.value=true
+        isEmpty.value = false
+        isLoading.value = true
 
         binding = ActivityUpBinding.inflate(layoutInflater)
         binding.lifecycleOwner= this

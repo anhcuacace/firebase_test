@@ -3,14 +3,12 @@ package com.example.firebase_test
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.firebase_test.databinding.ActivityLoadBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import java.util.ArrayList
 
-class LoadActivity : AppCompatActivity() {
+class LoadActivity : BaseActivity() {
     var isEmpty = MutableLiveData(false)
     var isLoading = MutableLiveData(false)
     val adapter = RoomAdapter()

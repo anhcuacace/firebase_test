@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
@@ -21,16 +19,16 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.*
-import kotlin.collections.ArrayList
 
-class EditRoomActivity : AppCompatActivity() {
-    lateinit var binding : ActivityEditRoomBinding
-     var listAnh = ArrayList<Any>()
-     var listImageView = ArrayList<ImageView>()
+class EditRoomActivity : BaseActivity() {
+    lateinit var binding: ActivityEditRoomBinding
+    var listAnh = ArrayList<Any>()
+    var listImageView = ArrayList<ImageView>()
     var id = " "
     var vitri = -1
     lateinit var activityResultLauncher1: ActivityResultLauncher<Intent>
-//    lateinit var activityResultLauncher2: ActivityResultLauncher<Intent>
+
+    //    lateinit var activityResultLauncher2: ActivityResultLauncher<Intent>
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,14 +95,15 @@ class EditRoomActivity : AppCompatActivity() {
 //            }
 //        }
         binding.btnDang.setOnClickListener {
-           val listCheck = arrayListOf<Int>()
-            listAnh.forEachIndexed{ index, imageView ->
+            showLoading()
+            val listCheck = arrayListOf<Int>()
+            listAnh.forEachIndexed { index, imageView ->
                 if (imageView.checkUri())
                     listCheck.add(index)
             }
 
             listAnh.forEachIndexed { index, imageView ->
-                if(listCheck.contains(index)){
+                if (listCheck.contains(index)) {
                     val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
                     val storageReference: StorageReference = firebaseStorage.reference
                     val imageName = UUID.randomUUID().toString()
@@ -119,14 +118,13 @@ class EditRoomActivity : AppCompatActivity() {
                             listAnh[index] = url.toString()
 
                             listCheck.remove(index)
-                            if (listCheck.isEmpty()){
+                            if (listCheck.isEmpty()) {
                                 upFireBase()
                             }
 
                         }
                     }
-                }
-                else if (index == listAnh.size-1){
+                } else if (index == listAnh.size - 1) {
                     upFireBase()
                 }
             }
@@ -141,13 +139,11 @@ class EditRoomActivity : AppCompatActivity() {
         roomMap["roomName"] = "Test Edit"
 
 
-        var myReference: DatabaseReference = database.reference.child("Rooms")
+        val myReference: DatabaseReference = database.reference.child("Rooms")
         myReference.child(id).updateChildren(roomMap).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this,"Hoan Thanh",Toast.LENGTH_SHORT).show()
-
-                var intent = Intent(this,LoadActivity::class.java)
-                startActivity(intent)
+                hiddenLoading()
                 finish()
             }
         }

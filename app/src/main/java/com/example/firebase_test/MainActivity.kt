@@ -10,14 +10,13 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.firebase_test.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity() {
-    companion object{
+class MainActivity : BaseActivity() {
+    companion object {
         private val STORAGE_PERMISSION_UNDER_STORAGE_SCOPE = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -26,14 +25,15 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
     }
-    private lateinit var binding:ActivityMainBinding
+
+    private lateinit var binding: ActivityMainBinding
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (!storagePermissionGrant()) {
                 showAlertPermissionNotGrant()
             } else {
-                val intent=Intent(this,UpActivity::class.java)
+                val intent = Intent(this, UpActivity::class.java)
                 startActivity(intent)
             }
         }
