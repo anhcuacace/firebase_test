@@ -53,28 +53,30 @@ class EditRoomActivity : AppCompatActivity() {
         if (bundle != null) {
            listAnh.addAll(bundle.getStringArrayList("roomAnh")!!)
             listAnh.forEachIndexed { index, any ->
-
                loadAnh(any,listImageView[index])
-               listImageView[index].setOnClickListener {
-                   vitri = index
-                   if (ContextCompat.checkSelfPermission(
-                           this,
-                           Manifest.permission.READ_EXTERNAL_STORAGE
-                       )
-                       != PackageManager.PERMISSION_GRANTED
-                   ) {
-                       ActivityCompat.requestPermissions(
-                           this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
-                       )
-                   } else {
-                       val intent = Intent()
-                       intent.type = "image/*"
-                       intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                       intent.action = Intent.ACTION_GET_CONTENT
-                       activityResultLauncher1.launch(intent)
-                   }
-               }
            }
+            listImageView.forEachIndexed { index, imageView ->
+                imageView.setOnClickListener {
+                    vitri = index
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                        != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
+                        )
+                    } else {
+                        val intent = Intent()
+                        intent.type = "image/*"
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                        intent.action = Intent.ACTION_GET_CONTENT
+                        activityResultLauncher1.launch(intent)
+                    }
+                }
+            }
+
         }
 //        listImageView[2].setOnClickListener {
 //            if (ContextCompat.checkSelfPermission(
@@ -95,14 +97,14 @@ class EditRoomActivity : AppCompatActivity() {
 //            }
 //        }
         binding.btnDang.setOnClickListener {
-            var count = 0
+           val listCheck = arrayListOf<Int>()
             listAnh.forEachIndexed{ index, imageView ->
                 if (imageView.checkUri())
-                    count = index
+                    listCheck.add(index)
             }
 
             listAnh.forEachIndexed { index, imageView ->
-                if(imageView.checkUri()){
+                if(listCheck.contains(index)){
                     val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
                     val storageReference: StorageReference = firebaseStorage.reference
                     val imageName = UUID.randomUUID().toString()
@@ -115,9 +117,12 @@ class EditRoomActivity : AppCompatActivity() {
                         myUploadedImageReference.downloadUrl.addOnSuccessListener { url ->
 
                             listAnh[index] = url.toString()
-                            if (count == index){
+
+                            listCheck.remove(index)
+                            if (listCheck.isEmpty()){
                                 upFireBase()
                             }
+
                         }
                     }
                 }
@@ -140,6 +145,10 @@ class EditRoomActivity : AppCompatActivity() {
         myReference.child(id).updateChildren(roomMap).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this,"Hoan Thanh",Toast.LENGTH_SHORT).show()
+
+                var intent = Intent(this,LoadActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }
@@ -161,6 +170,7 @@ class EditRoomActivity : AppCompatActivity() {
                         imageUri?.let {
                            Glide.with(this).load(it).into(listImageView[vitri])
                             if (listAnh.size-1<vitri){
+                                vitri = listAnh.size
                                 listAnh.add(it)
                             }else{
                                 listAnh[vitri] = it

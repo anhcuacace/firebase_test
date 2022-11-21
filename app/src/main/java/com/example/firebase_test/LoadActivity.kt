@@ -32,6 +32,7 @@ class LoadActivity : AppCompatActivity() {
                     Intent(this, EditRoomActivity::class.java)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
+                finish()
             }
 
 
