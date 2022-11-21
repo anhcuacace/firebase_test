@@ -28,9 +28,9 @@ class EditRoomActivity : AppCompatActivity() {
      var listAnh = ArrayList<Any>()
      var listImageView = ArrayList<ImageView>()
     var id = " "
-    var vitri = 0
+    var vitri = -1
     lateinit var activityResultLauncher1: ActivityResultLauncher<Intent>
-    lateinit var activityResultLauncher2: ActivityResultLauncher<Intent>
+//    lateinit var activityResultLauncher2: ActivityResultLauncher<Intent>
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +53,10 @@ class EditRoomActivity : AppCompatActivity() {
         if (bundle != null) {
            listAnh.addAll(bundle.getStringArrayList("roomAnh")!!)
             listAnh.forEachIndexed { index, any ->
-                vitri = index
+
                loadAnh(any,listImageView[index])
                listImageView[index].setOnClickListener {
+                   vitri = index
                    if (ContextCompat.checkSelfPermission(
                            this,
                            Manifest.permission.READ_EXTERNAL_STORAGE
@@ -75,24 +76,24 @@ class EditRoomActivity : AppCompatActivity() {
                }
            }
         }
-        listImageView[2].setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
-                )
-            } else {
-                val intent = Intent()
-                intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.action = Intent.ACTION_GET_CONTENT
-                activityResultLauncher2.launch(intent)
-            }
-        }
+//        listImageView[2].setOnClickListener {
+//            if (ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE
+//                )
+//                != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                ActivityCompat.requestPermissions(
+//                    this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
+//                )
+//            } else {
+//                val intent = Intent()
+//                intent.type = "image/*"
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//                intent.action = Intent.ACTION_GET_CONTENT
+//                activityResultLauncher2.launch(intent)
+//            }
+//        }
         binding.btnDang.setOnClickListener {
             var count = 0
             listAnh.forEachIndexed{ index, imageView ->
@@ -159,28 +160,33 @@ class EditRoomActivity : AppCompatActivity() {
 
                         imageUri?.let {
                            Glide.with(this).load(it).into(listImageView[vitri])
-                            listAnh[vitri] = it
+                            if (listAnh.size-1<vitri){
+                                listAnh.add(it)
+                            }else{
+                                listAnh[vitri] = it
+                            }
+
                         }
                     }
                 })
         //
-        activityResultLauncher2 =
-            registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult(),
-                ActivityResultCallback { result ->
-
-                    val resultCode = result.resultCode
-                    val imageData = result.data
-
-                    if (resultCode == RESULT_OK && imageData != null) {
-                        var  imageUri = imageData.data
-
-                        imageUri?.let {
-                            Glide.with(this).load(it).into(listImageView[2])
-                            listAnh[2] = it
-                        }
-                    }
-                })
+//        activityResultLauncher2 =
+//            registerForActivityResult(
+//                ActivityResultContracts.StartActivityForResult(),
+//                ActivityResultCallback { result ->
+//
+//                    val resultCode = result.resultCode
+//                    val imageData = result.data
+//
+//                    if (resultCode == RESULT_OK && imageData != null) {
+//                        var  imageUri = imageData.data
+//
+//                        imageUri?.let {
+//                            Glide.with(this).load(it).into(listImageView[2])
+//                            listAnh[2] = it
+//                        }
+//                    }
+//                })
     }
     fun Any.checkUri():Boolean{
         return this is Uri
